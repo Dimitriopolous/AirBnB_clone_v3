@@ -71,3 +71,11 @@ will show you the specific privileges the user has on the different databases.
 ## Bugs
 
 + No known bugs at this time.
+
+#### Authors
+
+v1: Steven Garcia, Binita Rai
+
+v2: Steven Garcia, Lindsey Hemenez
+
+v3: Jacob Hartman, Dimitrios Philliou
