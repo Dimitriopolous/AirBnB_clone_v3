@@ -42,7 +42,6 @@ class DBStorage():
         Queries current database session based on class.
         Returns a dictionary representation of the query.
         '''
-        result = []
         new_dict = {}
         if cls is not None:
             result = self.__session.query(eval(cls)).all()
@@ -97,3 +96,28 @@ class DBStorage():
         close method on the class Session
         '''
         self.__session.close()
+
+    def get(self, cls, id):
+        '''
+        Retrieves one object of cls.id
+        Returns None upon failure
+        '''
+        if isinstance(cls, str) and isinstance(id, str):
+            if len(cls) == 0 or len(id) == 0:
+                return None
+            key = cls + '.' + id
+            dictionary = self.all(cls)
+            return dictionary[key] if key in dictionary else None
+        return None
+
+    def count(self, cls=None):
+        '''
+        Returns the number of objects in storage
+        Matching the given class name
+        Returns number of all objects in storage
+        If no class name is passed
+        '''
+        if cls == None or (isinstance(cls, str) and len(cls) == 0):
+            return len(self.all())
+        if isinstance(cls, str):
+            return len(self.all(cls))
