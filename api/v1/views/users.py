@@ -35,19 +35,22 @@ def get_one_user(user_id=None):
 
 
 @app_views.route('/users', strict_slashes=False, methods=['POST'])
-def post_new_user˜():
+def post_new_user():
     ''' Submits POST request to add a new user to the dictionary of users '''
     data = request.get_json()
     if data is None:
         abort(400, 'Not a JSON')
     else:
-        if 'name' in data:
+        if 'email' not in data:
+            abort(400, 'Missing email')
+        elif 'password' not in data:
+            abort(400, 'Missing password')
+        else:
             new_user = User()
-            setattr(new_user, 'name', data['name'])
+            setattr(new_user, 'email', data['email'])
+            setattr(new_user, 'password', data['password'])
             new_user.save()
             return jsonify(new_user.to_dict()), 201
-        else:
-            abort(400, 'Missing name')
 
 
 @app_views.route('/users/<user_id>', strict_slashes=False, methods=['DELETE'])
@@ -76,4 +79,7 @@ def put_to_user(user_id=None):
                 setattr(obj, key, val)
         obj.save()
         return jsonify(obj.to_dict()), 200
+
+
+
 
