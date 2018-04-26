@@ -29,7 +29,7 @@ def get_all_places(city_id=None):
 
 
 @app_views.route('/places/<place_id>', strict_slashes=False, methods=['GET'])
-def get_one_place(city_id=None):
+def get_one_place(place_id=None):
     ''' Gets a dictionary of specified place then jsonifies and returns it '''
     retrieved_place = storage.get("Place", place_id)
     if retrieved_place is None:
@@ -47,20 +47,22 @@ def post_new_place(city_id=None):
     else:
         if 'user_id' not in data:
             abort(400, 'Missing user_id')
-        if 'name' in data:
+        elif 'name' not in data:
+            abort(400, 'Missing name')
+        else:
             city_of_new_place = storage.get("City", city_id)
             if city_of_new_place is None:
                 abort(404)
+            print("user_id from JSON: {}".format(data['user_id']))
             user_owner_of_place = storage.get("User", data['user_id'])
             if user_owner_of_place is None:
                 abort(404)
             new_place = Place()
+            setattr(new_place, 'user_id', data['user_id'])
             setattr(new_place, 'name', data['name'])
             setattr(new_place, 'city_id', city_id)
             new_place.save()
             return jsonify(new_place.to_dict()), 201
-        else:
-            abort(400, 'Missing name')
 
 
 @app_views.route('/places/<place_id>', strict_slashes=False, methods=['DELETE'])
