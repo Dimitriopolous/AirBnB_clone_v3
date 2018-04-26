@@ -31,7 +31,7 @@ def get_one_state(state_id=None):
     if retrieved_state == None:
         abort(404)
     else:
-        return jsonify(retrieved_state.to_date())
+        return jsonify(retrieved_state.to_dict())
 
 
 @app_views.route('/states', strict_slashes=False, methods=['POST'])
