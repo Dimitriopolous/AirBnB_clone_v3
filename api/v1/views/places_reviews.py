@@ -30,7 +30,7 @@ def get_all_reviews(place_id=None):
 
 
 @app_views.route('/reviews/<review_id>', strict_slashes=False, methods=['GET'])
-def get_one_review(place_id=None):
+def get_one_review(review_id=None):
     ''' Gets a dictionary of specified review then jsonifies and returns it '''
     retrieved_review = storage.get("Review", review_id)
     if retrieved_review is None:
@@ -56,6 +56,7 @@ def post_new_review(place_id=None):
             if owner_of_review is None:
                 abort(404)
             new_review = Review()
+            setattr(new_review, 'user_id', data['user_id'])
             setattr(new_review, 'text', data['text'])
             setattr(new_review, 'place_id', place_id)
             new_review.save()
