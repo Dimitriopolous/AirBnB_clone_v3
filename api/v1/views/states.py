@@ -26,6 +26,7 @@ def get_all_states():
 
 @app_views.route('/states/<state_id>', strict_slashes=False, methods=['GET'])
 def get_one_state(state_id=None):
+    ''' Gets a dictionary of specified state then jsonifies and returns it '''
     state = jsonify(storage.get("State", state_id).to_dict())
     if state == None:
         abort(404)
@@ -34,29 +35,34 @@ def get_one_state(state_id=None):
 
 @app_views.route('/states', strict_slashes=False, methods=['POST'])
 def post_new_state():
+    ''' Submits POST request to add a new state to the dictionary of states'''
     data = request.get_json()
     if data is None:
         abort(400, 'Not a JSON')
     else:
         if 'name' in data:
-            return jsonify(State().to_dict(), 201)
+            new_state = State()
+            setattr(new_state, 'name', data['name'])
+            new_state.save()
+            return jsonify(new_state.to_dict()), 201
         else:
             abort(400, 'Missing name')
 
 
 @app_views.route('/states/<state_id>', strict_slashes=False, methods=['DELETE'])
 def delete_state(state_id=None):
+    ''' Deletes a state from the dictionary of states'''
     obj = storage.get("State", state_id)
     if obj is None:
         abort(404)
     else:
         storage.delete(obj)
-        check = jsonify(storage.get("State", state_id).to_dict())       #Verifying if object was successfully deleted
-        return check, 200                                               #If doesn't work we can just return {}
+        return jsonify({}), 200
 
 
 @app_views.route('/states/<state_id>', strict_slashes=False, methods=['PUT'])
 def put_to_state(state_id=None):
+    ''' Updates an item in the dictionary of states '''
     data = request.get_json()
     if data is None:
         abort(400, 'Not a JSON')
@@ -65,7 +71,7 @@ def put_to_state(state_id=None):
         abort(404)
     else:
         for key, val in data.items():
-            if key in obj and key not in ['id', 'created_at', 'updated_at']:
+            if key in obj.to_dict() and key not in ['id', 'created_at', 'updated_at']:
                 setattr(obj, key, val)
         obj.save()
         return jsonify(obj.to_dict())
