@@ -1,8 +1,0 @@
-#!/usr/bin/python3
-'''
-    This Python mode contains the custom-built API for the HBnB project
-'''
-
-app = Flask(__name__)
-
-from models import stroage
