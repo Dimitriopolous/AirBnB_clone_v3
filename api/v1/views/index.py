@@ -12,6 +12,7 @@ def returnStatus():
     ''' return a JSON object with the given key and value '''
     return jsonify({"status": "OK"})
 
+
 @app_views.route('/stats', strict_slashes=False)
 def retrieveNumbers():
     ''' retrieves the number of each object by type '''
