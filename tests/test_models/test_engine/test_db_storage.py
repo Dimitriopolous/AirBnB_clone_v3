@@ -90,7 +90,7 @@ class testDBStorage(unittest.TestCase):
         got_id = models.storage.get(state.__class__.__name__, 6)
         self.assertEqual(got_name, None)
         self.assertEqual(got_id, None)
-        
+
     def test_count_not_string(self):
         '''
         Testing count() method if passed with incorrect type
@@ -103,8 +103,10 @@ class testDBStorage(unittest.TestCase):
         '''
         state = State(name="California")
         state.save()
-        self.assertRaises(NameError, lambda: models.storage.get("Food", state.id))
-        self.assertEqual(models.storage.get(state.__class__.__name__, "1234-5678"), None)
+        self.assertRaises(NameError, lambda: models.storage.get("Food",
+                                                                state.id))
+        self.assertEqual(models.storage.get(state.__class__.__name__,
+                                            "1234-5678"), None)
         self.assertRaises(NameError, lambda: models.storage.count("Food"))
 
     def test_correct_output(self):
@@ -113,7 +115,8 @@ class testDBStorage(unittest.TestCase):
         '''
         state = State(name="Oregon")
         state.save()
-        self.assertEqual(models.storage.count("State"), len(models.storage.all("State")))
+        self.assertEqual(models.storage.count("State"),
+                         len(models.storage.all("State")))
 
     def test_too_many_args(self):
         '''
@@ -121,9 +124,11 @@ class testDBStorage(unittest.TestCase):
         '''
         state = State(name="Hawaii")
         state.save()
-        self.assertRaises(TypeError, lambda: models.storage.count("State", "extra"))
+        self.assertRaises(TypeError,
+                          lambda: models.storage.count("State", "extra"))
         first_state_id = list(models.storage.all("State").values())[0].id
-        self.assertRaises(TypeError, lambda: models.storage.get("State", first_state_id, "extra"))
+        self.assertRaises(TypeError, lambda: models.storage.get("State",
+                          first_state_id, "extra"))
 
     def test_zero_args(self):
         '''
