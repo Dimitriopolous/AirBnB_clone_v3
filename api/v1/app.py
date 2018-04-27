@@ -1,4 +1,4 @@
-*#!/usr/bin/python3
+#!/usr/bin/python3
 '''
     This Python mode contains the custom-built API for the HBnB project
 '''
