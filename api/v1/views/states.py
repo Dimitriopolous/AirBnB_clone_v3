@@ -28,7 +28,7 @@ def get_all_states():
 def get_one_state(state_id=None):
     ''' Gets a dictionary of specified state then jsonifies and returns it '''
     retrieved_state = storage.get("State", state_id)
-    if retrieved_state == None:
+    if retrieved_state is None:
         abort(404)
     else:
         return jsonify(retrieved_state.to_dict())
@@ -50,7 +50,8 @@ def post_new_state():
             abort(400, 'Missing name')
 
 
-@app_views.route('/states/<state_id>', strict_slashes=False, methods=['DELETE'])
+@app_views.route('/states/<state_id>', strict_slashes=False,
+                 methods=['DELETE'])
 def delete_state(state_id=None):
     ''' Deletes a state from the dictionary of states'''
     obj = storage.get("State", state_id)
@@ -72,8 +73,8 @@ def put_to_state(state_id=None):
         abort(404)
     else:
         for key, val in data.items():
-            if key in obj.to_dict() and key not in ['id', 'created_at', 'updated_at']:
+            if (key in obj.to_dict() and
+                    key not in ['id', 'created_at', 'updated_at']):
                 setattr(obj, key, val)
         obj.save()
         return jsonify(obj.to_dict())
-
