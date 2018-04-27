@@ -24,11 +24,12 @@ def get_all_amenities():
     return jsonify(amenities)
 
 
-@app_views.route('/amenities/<amenity_id>', strict_slashes=False, methods=['GET'])
+@app_views.route('/amenities/<amenity_id>',
+                 strict_slashes=False, methods=['GET'])
 def get_one_amenity(amenity_id=None):
-    ''' Gets a dictionary of specified amenity then jsonifies and returns it '''
+    ''' Gets a dictionary of an amenity and returns it '''
     retrieved_amenity = storage.get("Amenity", amenity_id)
-    if retrieved_amenity == None:
+    if retrieved_amenity is None:
         abort(404)
     else:
         return jsonify(retrieved_amenity.to_dict())
@@ -36,7 +37,7 @@ def get_one_amenity(amenity_id=None):
 
 @app_views.route('/amenities', strict_slashes=False, methods=['POST'])
 def post_new_amenity():
-    ''' Submits POST request to add a new amenity to the dictionary of amenities'''
+    ''' Submits POST request to add a new amenity to the dict of amenities'''
     data = request.get_json()
     if data is None:
         abort(400, 'Not a JSON')
@@ -50,7 +51,8 @@ def post_new_amenity():
             abort(400, 'Missing name')
 
 
-@app_views.route('/amenities/<amenity_id>', strict_slashes=False, methods=['DELETE'])
+@app_views.route('/amenities/<amenity_id>',
+                 strict_slashes=False, methods=['DELETE'])
 def delete_amenity(amenity_id=None):
     ''' Deletes a amenity from the dictionary of amenities'''
     obj = storage.get("Amenity", amenity_id)
@@ -61,7 +63,8 @@ def delete_amenity(amenity_id=None):
         return jsonify({}), 200
 
 
-@app_views.route('/amenities/<amenity_id>', strict_slashes=False, methods=['PUT'])
+@app_views.route('/amenities/<amenity_id>',
+                 strict_slashes=False, methods=['PUT'])
 def put_to_amenity(amenity_id=None):
     ''' Updates an item in the dictionary of amenities '''
     data = request.get_json()
@@ -72,7 +75,8 @@ def put_to_amenity(amenity_id=None):
         abort(404)
     else:
         for key, val in data.items():
-            if key in obj.to_dict() and key not in ['id', 'created_at', 'updated_at']:
+            if (key in obj.to_dict() and key not in
+                    ['id', 'created_at', 'updated_at']):
                 setattr(obj, key, val)
         obj.save()
         return jsonify(obj.to_dict())
