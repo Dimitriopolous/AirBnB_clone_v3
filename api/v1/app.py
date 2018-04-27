@@ -14,17 +14,19 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 cors = CORS(app, resources={r'/*': {'origins': '0.0.0.0'}})
 
+
 @app.teardown_appcontext
 def teardownContext(exception):
     ''' Ends the session upon execution of this module '''
     storage.close()
+
 
 @app.errorhandler(404)
 def page_not_found(e):
     ''' Returns a 404 page not found error with a custom json page '''
     not_found = jsonify({"error": "Not found"})
     return not_found, 404
-    
+
 if __name__ == "__main__":
     app.run(host=os.getenv('HBNB_API_HOST', default='0.0.0.0'),
             port=int(os.getenv('HBNB_API_PORT', default=5000)))
