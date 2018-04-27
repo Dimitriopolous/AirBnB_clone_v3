@@ -16,9 +16,10 @@ from models.review import Review
 import json
 
 
-@app_views.route('/places/<place_id>/reviews', strict_slashes=False, methods=['GET'])
+@app_views.route('/places/<place_id>/reviews',
+                 strict_slashes=False, methods=['GET'])
 def get_all_reviews(place_id=None):
-    ''' Gets a dictionary of all reviews then jsonifies and returns it '''
+    ''' Gets a dictionary of all reviews and returns it '''
     place_of_reviews = storage.get("Place", place_id)
     if place_of_reviews is None:
         abort(404)
@@ -29,9 +30,10 @@ def get_all_reviews(place_id=None):
     return jsonify(reviews)
 
 
-@app_views.route('/reviews/<review_id>', strict_slashes=False, methods=['GET'])
+@app_views.route('/reviews/<review_id>',
+                 strict_slashes=False, methods=['GET'])
 def get_one_review(review_id=None):
-    ''' Gets a dictionary of specified review then jsonifies and returns it '''
+    ''' Gets a dictionary of specified review and returns it '''
     retrieved_review = storage.get("Review", review_id)
     if retrieved_review is None:
         abort(404)
@@ -39,9 +41,13 @@ def get_one_review(review_id=None):
         return jsonify(retrieved_review.to_dict())
 
 
-@app_views.route('/places/<place_id>/reviews', strict_slashes=False, methods=['POST'])
+@app_views.route('/places/<place_id>/reviews',
+                 strict_slashes=False, methods=['POST'])
 def post_new_review(place_id=None):
-    ''' Submits POST request to add a new review to the dictionary of review '''
+    '''
+    Submits POST request to add a new
+    review to the dictionary of review
+    '''
     data = request.get_json()
     if data is None:
         abort(400, 'Not a JSON')
@@ -65,7 +71,8 @@ def post_new_review(place_id=None):
             abort(400, 'Missing text')
 
 
-@app_views.route('/reviews/<review_id>', strict_slashes=False, methods=['DELETE'])
+@app_views.route('/reviews/<review_id>',
+                 strict_slashes=False, methods=['DELETE'])
 def delete_review(review_id=None):
     ''' Deletes a review from the dictionary of reviews '''
     obj = storage.get("Review", review_id)
@@ -76,7 +83,8 @@ def delete_review(review_id=None):
         return jsonify({}), 200
 
 
-@app_views.route('/reviews/<review_id>', strict_slashes=False, methods=['PUT'])
+@app_views.route('/reviews/<review_id>',
+                 strict_slashes=False, methods=['PUT'])
 def put_to_review(review_id=None):
     ''' Updates an item in the dictionary of reviews '''
     data = request.get_json()
@@ -87,8 +95,9 @@ def put_to_review(review_id=None):
         abort(404)
     else:
         for key, val in data.items():
-            if key in obj.to_dict() and key not in ['id', 'user_id', 'place_id', 'created_at', 'updated_at']:
+            if (key in obj.to_dict() and key not in
+                    ['id', 'user_id', 'place_id',
+                     'created_at', 'updated_at']):
                 setattr(obj, key, val)
         obj.save()
         return jsonify(obj.to_dict())
-
