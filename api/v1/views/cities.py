@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 '''
-    Blueprint app_views decorators
-    for HTTP requests that allow users
+    views for RESTful API
+    HTTP requests that allow users
     to manipulate data in storage
 '''
 
