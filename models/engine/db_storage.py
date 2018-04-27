@@ -117,7 +117,7 @@ class DBStorage():
         Returns number of all objects in storage
         If no class name is passed
         '''
-        if cls == None or (isinstance(cls, str) and len(cls) == 0):
+        if cls is None or (isinstance(cls, str) and len(cls) == 0):
             return len(self.all())
         if isinstance(cls, str):
             return len(self.all(cls))

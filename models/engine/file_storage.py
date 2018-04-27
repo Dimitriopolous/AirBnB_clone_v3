@@ -80,7 +80,6 @@ class FileStorage:
         '''
         self.reload()
 
-
     def get(self, cls, id):
         '''
         Retrieves one object of cls.id
