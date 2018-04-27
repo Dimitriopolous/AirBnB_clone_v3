@@ -15,7 +15,8 @@ from models.state import State
 import json
 
 
-@app_views.route('/states/<state_id>/cities', strict_slashes=False, methods=['GET'])
+@app_views.route('/states/<state_id>/cities',
+                 strict_slashes=False, methods=['GET'])
 def get_all_cities(state_id=None):
     ''' Gets a dictionary of all cities then jsonifies and returns it '''
     state_of_cities = storage.get("State", state_id)
@@ -38,7 +39,8 @@ def get_one_city(city_id=None):
         return jsonify(retrieved_city.to_dict())
 
 
-@app_views.route('/states/<state_id>/cities', strict_slashes=False, methods=['POST'])
+@app_views.route('/states/<state_id>/cities',
+                 strict_slashes=False, methods=['POST'])
 def post_new_city(state_id=None):
     ''' Submits POST request to add a new city to the dictionary of cities '''
     data = request.get_json()
@@ -58,7 +60,8 @@ def post_new_city(state_id=None):
             abort(400, 'Missing name')
 
 
-@app_views.route('/cities/<city_id>', strict_slashes=False, methods=['DELETE'])
+@app_views.route('/cities/<city_id>',
+                 strict_slashes=False, methods=['DELETE'])
 def delete_city(city_id=None):
     ''' Deletes a city from the dictionary of cities '''
     obj = storage.get("City", city_id)
@@ -80,8 +83,8 @@ def put_to_city(city_id=None):
         abort(404)
     else:
         for key, val in data.items():
-            if key in obj.to_dict() and key not in ['id', 'state_id', 'created_at', 'updated_at']:
+            if (key in obj.to_dict() and key not in
+                    ['id', 'state_id', 'created_at', 'updated_at']):
                 setattr(obj, key, val)
         obj.save()
         return jsonify(obj.to_dict())
-
